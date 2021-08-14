@@ -1,3 +1,6 @@
+
+
+
 <template>
   <div class="wrapper fadeInDown">
     <div id="formContent">
@@ -24,15 +27,26 @@
           class="fadeIn second"
           name="email"
           placeholder="Email"
+          v-model="form.email"
         />
+        <p v-if="error.email != ''">{{ error.email }}</p>
         <input
           type="text"
           id="password"
           class="fadeIn third"
           name="password"
           placeholder="Password"
+          v-model="form.password"
         />
-        <input type="submit" class="fadeIn fourth" value="Log In" />
+        <p v-if="error.password != ''">{{ error.password }}</p>
+        <button
+          class="fadeIn fourth"
+          @click="login()"
+          :loading="isLoading"
+          :disabled="isLoading"
+        >
+          {{ isLoading ? "Please wait . . ." : "Sign In" }}
+        </button>
       </form>
 
       <!-- Remind Passowrd -->
@@ -72,6 +86,28 @@ h2 {
   display: inline-block;
   margin: 40px 8px 10px 8px;
   color: #cccccc;
+}
+
+button {
+  background-color: #56baed;
+  border: none;
+  color: white;
+  padding: 15px 80px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 13px;
+  -webkit-box-shadow: 0 10px 30px 0 rgba(95, 186, 233, 0.4);
+  box-shadow: 0 10px 30px 0 rgba(95, 186, 233, 0.4);
+  -webkit-border-radius: 5px 5px 5px 5px;
+  border-radius: 5px 5px 5px 5px;
+  margin: 5px 20px 40px 20px;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 /* STRUCTURE */
@@ -330,6 +366,86 @@ input[type="text"]:placeholder {
   box-sizing: border-box;
 }
 </style>
+
+
 <script>
-export default {};
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      isLoading: false,
+
+      form: {
+        email: "",
+        password: "",
+      },
+      error: {
+        email: "",
+        password: "",
+      },
+      errorMsg: "",
+      reg: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
+    };
+  },
+
+  methods: {
+    async login() {
+      this.clearData();
+      let flag = 1;
+      if (
+        !this.form.email ||
+        this.form.email.trim() == "" ||
+        this.form.email == null
+      ) {
+        this.error.email = "Email is required!";
+        flag = 0;
+      }
+      if (this.form.email && !this.reg.test(this.form.email)) {
+        this.error.email = "Invalid email format!";
+        flag = 0;
+      }
+
+      if (
+        !this.form.password ||
+        this.form.password.trim() == "" ||
+        this.form.password == null
+      ) {
+        this.error.password = "Password is required!";
+        return;
+      }
+
+      if (this.form.password.trim().length < 6) {
+        this.error.password = "Password must be at least 6 characters long!";
+        flag = 0;
+      }
+
+      if (flag == 0) return;
+      this.isLoading = true;
+      const res = await axios.post("login", {
+        email: this.form.email,
+        password: this.form.password,
+      });
+      if (res.status == 200) {
+        console.log("Login Successful");
+        window.location = "/home";
+      } else if (res.status == 401) {
+        console.log(res.data.message);
+      } else {
+        console.log("Something went wrong!");
+      }
+      this.isLoading = false;
+    },
+
+    clearData() {
+      this.error = {
+        email: "",
+        password: "",
+      };
+    },
+  },
+  created() {},
+  computed: {},
+};
 </script>
+

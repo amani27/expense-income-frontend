@@ -2,7 +2,7 @@
   <div class="wrapper fadeInDown">
     <div id="formContent">
       <!-- Tabs Titles -->
-      <NuxtLink to="/">
+      <NuxtLink to="/login">
         <h2 class="inactive underlineHover">Sign In</h2>
       </NuxtLink>
       <h2 class="active">Sign Up</h2>
@@ -39,7 +39,7 @@
           name="confirmpassword"
           placeholder="Confirm Password"
         />
-        <input type="submit" class="fadeIn fourth" value="Log In" />
+        <input type="submit" class="fadeIn fourth" value="Sign Up" />
       </form>
 
       <!-- Remind Passowrd -->

@@ -33,7 +33,17 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios',
   ],
+
+  /*
+ ** Axios module configuration
+ ** See https://axios.nuxtjs.org/options
+ */
+  axios: {
+    baseURL: "http://127.0.0.1:3333/",
+    credentials: true
+  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
