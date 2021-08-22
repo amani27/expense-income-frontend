@@ -32,11 +32,11 @@
             <th id="date">Date</th>
             <th id="amount">Amount</th>
           </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+          <tr v-for="(accounts, index) in accounts" :key="index">
+            <td>accounts[index].id</td>
+            <td>accounts[index].type</td>
+            <td>accounts[index].date</td>
+            <td>accounts[index].amount</td>
           </tr>
         </tbody>
       </table>
@@ -390,5 +390,47 @@ select:placeholder {
 
 
 <script>
-export default {};
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      isLoading: false,
+      accounts: [],
+      errorMsg: "",
+    };
+  },
+
+  methods: {
+    // async getAccounts() {
+    //   this.isLoading = true;
+    //   const res = await axios.get("fetchUserAccounts");
+    //   if (res.status == 200) {
+    //     accounts = res.body;
+    //     console.log(res.body)
+    //     // window.location = "/home";
+    //   } else if (res.status == 401) {
+    //     console.log(res.data.message);
+    //   } else {
+    //     console.log("Something went wrong!");
+    //   }
+    //   this.isLoading = false;
+    // },
+  },
+  async created() {
+    this.isLoading = true;
+    const res = await axios.get("http://127.0.0.1:3333/fetchUserAccounts");
+    if (res.status == 200) {
+      accounts = res.body;
+      console.log(res.body);
+      // window.location = "/home";
+    } else if (res.status == 401) {
+      console.log(res.data.message);
+    } else {
+      console.log("Something went wrong!");
+    }
+    this.isLoading = false;
+  },
+  computed: {},
+};
 </script>
