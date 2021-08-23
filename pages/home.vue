@@ -32,11 +32,11 @@
             <th id="date">Date</th>
             <th id="amount">Amount</th>
           </tr>
-          <tr v-for="(accounts, index) in accounts" :key="index">
-            <td>accounts[index].id</td>
-            <td>accounts[index].type</td>
-            <td>accounts[index].date</td>
-            <td>accounts[index].amount</td>
+          <tr v-for="(account, index) in accounts" :key="index">
+            <td>{{ account.id }}</td>
+            <td>{{ account.type }}</td>
+            <td>{{ account.date }}</td>
+            <td>{{ account.amount }}</td>
           </tr>
         </tbody>
       </table>
@@ -421,8 +421,8 @@ export default {
     this.isLoading = true;
     const res = await axios.get("http://127.0.0.1:3333/fetchUserAccounts");
     if (res.status == 200) {
-      accounts = res.body;
-      console.log(res.body);
+      this.accounts = res.data;
+      console.log(res.data);
       // window.location = "/home";
     } else if (res.status == 401) {
       console.log(res.data.message);
